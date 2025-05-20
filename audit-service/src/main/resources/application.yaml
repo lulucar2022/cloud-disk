@@ -1,0 +1,9 @@
+# 日志配置
+logging:
+  level:
+    cn.lulucar.audit: info # 设置审计模块的日志级别为 DEBUG
+  file:
+    name: logs/audit.log # 日志文件路径
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" # 控制台日志格式
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" # 文件日志格式
