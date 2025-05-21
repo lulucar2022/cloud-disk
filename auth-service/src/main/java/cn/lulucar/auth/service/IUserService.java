@@ -23,18 +23,18 @@ public interface IUserService extends IService<User> {
 
     /**
      * 用户注册
+     *
      * @param user 用户信息
-     * @return 是否注册成功
      */
-    boolean register(User user);
+    void register(User user);
 
     /**
      * 修改密码
-     * @param userId 用户ID
+     *
+     * @param userId      用户ID
      * @param oldPassword 旧密码
      * @param newPassword 新密码
-     * @return 是否修改成功
      */
-    boolean changePassword(String userId, String oldPassword, String newPassword);
+    void changePassword(String userId, String oldPassword, String newPassword);
 }
 
