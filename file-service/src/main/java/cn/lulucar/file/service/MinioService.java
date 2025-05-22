@@ -1,5 +1,7 @@
 package cn.lulucar.file.service;
 
+import cn.lulucar.common.domain.Result;
+import cn.lulucar.common.exception.BusinessException;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.GetObjectArgs;
@@ -41,7 +43,7 @@ public class MinioService {
      * @param userId 用户 ID
      * @return 操作结果信息
      */
-    public String uploadFile(MultipartFile file, String userId) {
+    public Result<String> uploadFile(MultipartFile file, String userId) {
         try {
             InputStream inputStream = file.getInputStream();
             String objectName = userId + "/" + file.getOriginalFilename();
@@ -53,10 +55,10 @@ public class MinioService {
                             .contentType(file.getContentType())
                             .build()
             );
-            return "File uploaded successfully!";
+            return Result.success("File uploaded successfully!");
         } catch (MinioException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
             log.error("Error uploading file to MinIO", e);
-            return "Error uploading file to MinIO: " + e.getMessage();
+            throw new BusinessException(500, "Error uploading file to MinIO: " + e.getMessage());
         }
     }
 
@@ -67,7 +69,7 @@ public class MinioService {
      * @param userId      用户 ID
      * @param response    HttpServletResponse 对象，用于输出文件流
      */
-    public void downloadFile(String filename, String userId, HttpServletResponse response) {
+    public Result<String> downloadFile(String filename, String userId, HttpServletResponse response) {
         try {
             String objectName = userId + "/" + filename;
             InputStream stream = minioClient.getObject(io.minio.GetObjectArgs.builder()
@@ -82,14 +84,10 @@ public class MinioService {
             // 将文件流写入响应输出流
             IOUtils.copy(stream, response.getOutputStream());
             response.flushBuffer();
+            return Result.success("文件下载成功");
         } catch (MinioException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
             log.error("Error downloading file from MinIO", e);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                response.getWriter().write("Error downloading file from MinIO: " + e.getMessage());
-            } catch (IOException ex) {
-                log.error("Error writing error message to response", ex);
-            }
+            throw new BusinessException(500, "Error downloading file from MinIO: " + e.getMessage());
         }
     }
     

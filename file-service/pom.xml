@@ -8,6 +8,7 @@
     </parent>
 
     <artifactId>file-service</artifactId>
+    <name>file-service</name>
     <packaging>jar</packaging>
     
     <properties>
@@ -60,6 +61,16 @@
             <version>2.11.0</version>
         </dependency>
 
+        <!--nacos discovery-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!--负载均衡-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

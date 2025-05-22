@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @description 控制器类，用于处理文件上传和下载请求。
  */
 @RestController
-@RequestMapping("/files")
+@RequestMapping("/file")
 public class MinioController {
     @Autowired
     private MinioService minioService;
@@ -25,7 +25,7 @@ public class MinioController {
     }
 
     @GetMapping("/download")
-    public void downloadFile(@RequestParam("filename") String filename, @RequestHeader("X-User-Id") String userId, HttpServletResponse response) {
-        minioService.downloadFile(filename, userId, response);
+    public Result<String> downloadFile(@RequestParam("filename") String filename, @RequestHeader("X-User-Id") String userId, HttpServletResponse response) {
+        return minioService.downloadFile(filename, userId, response);
     }
 }
